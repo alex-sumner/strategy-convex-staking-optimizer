@@ -417,32 +417,34 @@ contract MyStrategy is BaseStrategy, CurveSwapper, UniswapSwapper, TokenSwapPath
         baseRewardsPool.getReward(address(this), true);
 
         uint256 cvxCrvRewardsPoolBalance = cvxCrvRewardsPool.balanceOf(address(this));
-        if (cvxCrvRewardsPoolBalance > 0) {
+        if (cvxCrvRewardsPoolBalance > 1e18) {
             cvxCrvRewardsPool.withdraw(cvxCrvRewardsPoolBalance, true);
         }
 
         uint256 cvxRewardsPoolBalance = cvxRewardsPool.balanceOf(address(this));
-        if (cvxRewardsPoolBalance > 0) {
+        if (cvxRewardsPoolBalance > 1e18) {
             cvxRewardsPool.withdraw(cvxRewardsPoolBalance, true);
         }
 
         harvestData.cvxCrvHarvested = cvxCrvToken.balanceOf(address(this));
+        bool enoughCvxCrv = harvestData.cvxCrvHarvested > 1e18;
         harvestData.cvxHarvsted = cvxToken.balanceOf(address(this));
+        bool enoughCvx = harvestData.cvxHarvsted > 1e18;
 
         // 2. Convert 3CRV -> cvxCRV via USDC
         uint256 threeCrvBalance = threeCrvToken.balanceOf(address(this));
-        if (threeCrvBalance > 0) {
+        if (threeCrvBalance > 1e18) {
             _remove_liquidity_one_coin(threeCrvSwap, threeCrvBalance, 1, 0);
             _swapExactTokensForTokens(sushiswap, usdc, usdcToken.balanceOf(address(this)), getTokenSwapPath(usdc, cvxCrv));
         }
 
         // 3. Sell 20% of accured rewards for underlying
-        if (harvestData.cvxCrvHarvested > 0) {
+        if (enoughCvxCrv) {
             uint256 cvxCrvToSell = harvestData.cvxCrvHarvested.mul(autoCompoundingBps).div(MAX_FEE);
             _swapExactTokensForTokens(sushiswap, cvxCrv, cvxCrvToSell, getTokenSwapPath(cvxCrv, wbtc));
         }
 
-        if (harvestData.cvxHarvsted > 0) {
+        if (enoughCvx) {
             uint256 cvxToSell = harvestData.cvxHarvsted.mul(autoCompoundingBps).div(MAX_FEE);
             _swapExactTokensForTokens(sushiswap, cvx, cvxToSell, getTokenSwapPath(cvx, wbtc));
         }
@@ -493,7 +495,7 @@ contract MyStrategy is BaseStrategy, CurveSwapper, UniswapSwapper, TokenSwapPath
         // 4. Roll WBTC gained into want position
         uint256 wbtcToDeposit = wbtcToken.balanceOf(address(this));
 
-        if (wbtcToDeposit > 0) {
+        if (wbtcToDeposit > 1e3) {
             _add_liquidity_single_coin(curvePool.swap, want, wbtc, wbtcToDeposit, curvePool.wbtcPosition, curvePool.numElements, 0);
             uint256 wantGained = IERC20Upgradeable(want).balanceOf(address(this)).sub(idleWant);
             // Half of gained want (10% of rewards) are auto-compounded, half of gained want is taken as a performance fee
@@ -505,12 +507,12 @@ contract MyStrategy is BaseStrategy, CurveSwapper, UniswapSwapper, TokenSwapPath
         // Deposit remaining want (including idle want) into strategy position
         uint256 wantToDeposited = IERC20Upgradeable(want).balanceOf(address(this));
 
-        if (wantToDeposited > 0) {
+        if (wantToDeposited > 1e15) {
             _deposit(wantToDeposited);
         }
 
         // 5. Deposit remaining CVX / cvxCRV rewards into helper vaults and distribute
-        if (harvestData.cvxCrvHarvested > 0) {
+        if (enoughCvxCrv) {
             uint256 cvxCrvToDistribute = cvxCrvToken.balanceOf(address(this));
 
             if (performanceFeeGovernance > 0) {
@@ -539,7 +541,7 @@ contract MyStrategy is BaseStrategy, CurveSwapper, UniswapSwapper, TokenSwapPath
             emit TreeDistribution(address(cvxCrvHelperVault), treeVaultPositionGained, block.number, block.timestamp);
         }
 
-        if (harvestData.cvxHarvsted > 0) {
+        if (enoughCvx) {
             uint256 cvxToDistribute = cvxToken.balanceOf(address(this));
 
             if (performanceFeeGovernance > 0) {

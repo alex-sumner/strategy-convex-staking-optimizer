@@ -1,0 +1,130 @@
+{
+    'Controller.approveStrategy': {
+        'avg': 43962,
+        'avg_success': 43962,
+        'count': 1,
+        'count_success': 1,
+        'high': 43962,
+        'low': 43962
+    },
+    'Controller.constructor': {
+        'avg': 1342647,
+        'avg_success': 1342647,
+        'count': 1,
+        'count_success': 1,
+        'high': 1342647,
+        'low': 1342647
+    },
+    'Controller.initialize': {
+        'avg': 133672,
+        'avg_success': 133672,
+        'count': 1,
+        'count_success': 1,
+        'high': 133672,
+        'low': 133672
+    },
+    'Controller.setStrategy': {
+        'avg': 45871,
+        'avg_success': 45871,
+        'count': 1,
+        'count_success': 1,
+        'high': 45871,
+        'low': 45871
+    },
+    'Controller.setVault': {
+        'avg': 44844,
+        'avg_success': 44844,
+        'count': 1,
+        'count_success': 1,
+        'high': 44844,
+        'low': 44844
+    },
+    'IERC20.approve': {
+        'avg': 45182,
+        'avg_success': 45182,
+        'count': 1,
+        'count_success': 1,
+        'high': 45182,
+        'low': 45182
+    },
+    'IERC20.transfer': {
+        'avg': 35597,
+        'avg_success': 35597,
+        'count': 1,
+        'count_success': 1,
+        'high': 35597,
+        'low': 35597
+    },
+    'ISettAccessControlDefended.approveContractAccess': {
+        'avg': 46281,
+        'avg_success': 46281,
+        'count': 2,
+        'count_success': 2,
+        'high': 46281,
+        'low': 46281
+    },
+    'MyStrategy.constructor': {
+        'avg': 5357987,
+        'avg_success': 5357987,
+        'count': 1,
+        'count_success': 1,
+        'high': 5357987,
+        'low': 5357987
+    },
+    'MyStrategy.harvest': {
+        'avg': 195017,
+        'avg_success': 195017,
+        'count': 10,
+        'count_success': 10,
+        'high': 632841,
+        'low': 86427
+    },
+    'MyStrategy.initialize': {
+        'avg': 942808,
+        'avg_success': 942808,
+        'count': 1,
+        'count_success': 1,
+        'high': 942808,
+        'low': 942808
+    },
+    'SettV3.constructor': {
+        'avg': 3053830,
+        'avg_success': 3053830,
+        'count': 1,
+        'count_success': 1,
+        'high': 3053830,
+        'low': 3053830
+    },
+    'SettV3.deposit': {
+        'avg': 155643,
+        'avg_success': 155643,
+        'count': 1,
+        'count_success': 1,
+        'high': 155643,
+        'low': 155643
+    },
+    'SettV3.earn': {
+        'avg': 418834,
+        'avg_success': 418834,
+        'count': 1,
+        'count_success': 1,
+        'high': 418834,
+        'low': 418834
+    },
+    'SettV3.initialize': {
+        'avg': 303851,
+        'avg_success': 303851,
+        'count': 1,
+        'count_success': 1,
+        'high': 303851,
+        'low': 303851
+    },
+    'SettV3.unpause': {
+        'avg': 14945,
+        'avg_success': 14945,
+        'count': 1,
+        'count_success': 1,
+        'high': 14945,
+        'low': 14945
+    }
+}

@@ -8,6 +8,8 @@ from brownie import (
     AdminUpgradeabilityProxy,
     Controller,
     BadgerRegistry,
+    convert,
+    Contract,
 )
 
 from config import WANT, FEES, REGISTRY, PID, CURVE_POOL_CONFIG, WANT_CONFIG
@@ -16,6 +18,8 @@ from helpers.constants import AddressZero
 
 import click
 from rich.console import Console
+
+from dotmap import DotMap
 
 console = Console()
 
@@ -31,8 +35,8 @@ def main():
     are set based on the latest entries from the Badger Registry.
     """
 
-    # Get deployer account from local keystore
-    dev = connect_account()
+    # Get deployer account
+    dev = accounts[0]
 
     # Get actors from registry
     registry = BadgerRegistry.at(REGISTRY)
@@ -73,6 +77,14 @@ def main():
 
     # Wire up vault and strategy to test controller
     wire_up_test_controller(controller, vault, strategy, dev)
+
+    return DotMap(
+        deployer=dev,
+        controller=controller,
+        vault=vault,
+        strategy=strategy,
+        want=Contract.from_explorer(WANT),
+    )
 
 
 def deploy_controller(dev, proxyAdmin):

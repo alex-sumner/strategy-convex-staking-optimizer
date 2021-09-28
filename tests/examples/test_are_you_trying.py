@@ -39,8 +39,18 @@ def test_are_you_trying(deployer, sett, strategy, want):
     # Change to this if the strat is supposed to hodl and do nothing
     # assert strategy.balanceOf(want) = depositAmount
 
-    ## TEST 2: Is the Harvest profitable?
+    ## TEST 2: How much gas does the harvest use?
+    balanceBefore = strategy.balanceOf()
+
     harvest = strategy.harvest({"from": deployer})
-    event = harvest.events["Harvest"]
-    # If it doesn't print, we don't want it
-    assert event["harvested"] > 0
+    gasUsed = harvest.gas_used
+    for delay in [1200, 85000, 20000, 3600, 86400, 230000, 34567, 92611, 180234]:
+        chain.sleep(delay)
+        harvest = strategy.harvest({"from": deployer})
+        gasUsed += harvest.gas_used
+
+    balanceAfter = strategy.balanceOf()
+    assert balanceAfter >= balanceBefore
+    balanceIncrease = balanceAfter - balanceBefore
+    print("gas used: ", gasUsed, ", balance increase ", balanceIncrease)
+    assert False

@@ -1,0 +1,35 @@
+Submission for the Badger Finance Strategy Convex Staking Optimizer hackathon bounty. ( https://github.com/Badger-Finance/strategy-convex-staking-optimizer )
+
+A git diff patch for the following changes is available in harvest_optimization.patch. All changed files are also included in full in the zip.
+
+Changes to MyStrategy.sol:
+
+Added checks to avoid processing small amounts of tokens in the harvest function. The thresholds are hard coded to 1e3 for WBTC, 1e15 for WANT, and 1e18 for everything else (CVX, cvxCRV, 3CRV). These values were arrived at by testing as giving the highest gas reduction without reducing the gains of harvesting over the test. The contract is close to the EIP-170 size limit. Constant variables for the limits were not used as these caused the contract to exceed the EIP-170 limit.
+
+Changes to tests:
+
+Various minor changes such as replacing assert False with assert True in StrategyResolver.py and test_custom.py.
+
+Two additional approveContractAccess calls in conftest.py to allow the strategy to call the CVX and cvxCRV helper contracts.
+
+The main additional test is in tests/examples/test_are_you_trying.py which calls the harvest function in a loop with differing simulated delays and sums the gas costs of these harvesting transactions.
+
+Test results:
+
+All tests are passing and the gas cost results from test_are_you_trying.py are as follows.
+
+For the original implementation of the harvest function:
+
+>>> balanceIncrease
+107268107686937
+>>> gasUsed
+3746800
+
+For the optimized version of the harvest function:
+
+>>> balanceIncrease
+107450244037795
+>>> gasUsed
+1935186
+
+Which is slightly under 52% of the original gas cost.

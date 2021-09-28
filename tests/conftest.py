@@ -12,6 +12,8 @@ from config import (
     WANT,
     FEES,
     WANT_CONFIG,
+    CVXHELPER,
+    CVXCRVHELPER,
 )
 from dotmap import DotMap
 import pytest
@@ -68,8 +70,12 @@ def deployed():
         FEES,
         CURVE_POOL_CONFIG,
     )
-
     ## Tool that verifies bytecode (run independently) <- Webapp for anyone to verify
+
+    cvxCrvHelper = interface.ISettAccessControlDefended(CVXCRVHELPER)
+    cvxCrvHelper.approveContractAccess(strategy, {"from": governance})
+    cvxHelper = interface.ISettAccessControlDefended(CVXHELPER)
+    cvxHelper.approveContractAccess(strategy, {"from": governance})
 
     ## Set up tokens
     want = interface.IERC20(WANT)
@@ -80,8 +86,12 @@ def deployed():
     controller.setStrategy(WANT, strategy, {"from": deployer})
 
     # Transfer test assets to deployer
-    whale = accounts.at("0x647481c033A4A2E816175cE115a0804adf793891", force=True) # RenCRV whale
-    want.transfer(deployer.address, want.balanceOf(whale.address), {"from": whale}) # Transfer 80% of whale's want balance
+    whale = accounts.at(
+        "0x647481c033A4A2E816175cE115a0804adf793891", force=True
+    )  # RenCRV whale
+    want.transfer(
+        deployer.address, want.balanceOf(whale.address), {"from": whale}
+    )  # Transfer 80% of whale's want balance
 
     assert want.balanceOf(deployer.address) > 0
 

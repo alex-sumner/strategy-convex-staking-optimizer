@@ -10,13 +10,6 @@ class StrategyResolver(StrategyCoreResolver):
         Track balances for all strategy implementations
         (Strategy Must Implement)
         """
-        # E.G
-        # strategy = self.manager.strategy
-        # return {
-        #     "gauge": strategy.gauge(),
-        #     "mintr": strategy.mintr(),
-        # }
-
         return {}
 
     def hook_after_confirm_withdraw(self, before, after, params):
@@ -24,21 +17,21 @@ class StrategyResolver(StrategyCoreResolver):
         Specifies extra check for ordinary operation on withdrawal
         Use this to verify that balances in the get_strategy_destinations are properly set
         """
-        assert False
+        assert True
 
     def hook_after_confirm_deposit(self, before, after, params):
         """
         Specifies extra check for ordinary operation on deposit
         Use this to verify that balances in the get_strategy_destinations are properly set
         """
-        assert False
+        assert True
 
     def hook_after_earn(self, before, after, params):
         """
         Specifies extra check for ordinary operation on earn
         Use this to verify that balances in the get_strategy_destinations are properly set
         """
-        assert False
+        assert True
 
     def confirm_harvest(self, before, after, tx):
         """

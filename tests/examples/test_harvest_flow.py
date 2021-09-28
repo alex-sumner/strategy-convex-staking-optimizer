@@ -1,4 +1,5 @@
 import brownie
+import pytest
 from brownie import *
 from helpers.constants import MaxUint256
 from helpers.SnapshotManager import SnapshotManager
@@ -61,7 +62,6 @@ def test_single_user_harvest_flow(
     shares = vault.balanceOf(deployer)
 
     assert want.balanceOf(sett) > 0
-    print("want.balanceOf(sett)", want.balanceOf(sett))
 
     # Earn
     snap.settEarn({"from": settKeeper})
